@@ -3,7 +3,7 @@ from statsd import client as statsd
 
 class BlueMatadorClient():
     def __init__(self, prefix=None, host=os.environ.get('BLUEMATADOR_AGENT_HOST', 'localhost'), port=os.environ.get('BLUEMATADOR_AGENT_PORT', 8767)):
-        self.client = statsd.StatsClient(host, port, prefix)
+        self.client = statsd.StatsClient(host, port, self.sanitize(prefix))
 
     def count(self, name, value=1, sample_rate=1, labels={}):
         '''
