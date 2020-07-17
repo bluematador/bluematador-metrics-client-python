@@ -1,9 +1,9 @@
 from distutils.core import setup
 
 setup(
-    name='bluematador-metrics-client-python',
+    name='bluematador',
     version='0.1dev',
-    packages=['bluematador-metrics-client-python'],
+    packages=['bluematador'],
     license='MIT',
     description='Send StatsD-style custom metrics to your Blue Matador account.',
     long_description=open('README').read(),
