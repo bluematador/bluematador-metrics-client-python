@@ -7,11 +7,26 @@ class BlueMatadorClient():
 
     def count(self, name, value=1, sample_rate=1, labels={}):
         '''
+        Send a counter metric to the Blue Matador Agent.
+
+            Parameters:
+                name (string): (required) The metric name e.g. 'myapp.request.size'. Cannot contain ':' or '|'
+                value (number): (optional) the amount to increment the metric by, the default is 1.
+                sample_rate (number): (optional) sends only a sample of data e.g. 0.5 indicates 50% of data being sent. Default value is 1
+                labels (dict): (optional)  adds metadata to a metric. Specified as a dict of key value pairs. Cannot contain '#' or '|'
         '''
         self.client.incr(self.sanitize(name, ':'), value, sample_rate, tags=self.sanitize_labels(labels))
 
     def gauge(self, name, value, sample_rate=1, labels={}):
         '''
+        Send a gauge metric to the Blue Matador agent.
+
+            Parameters:
+
+                name (string): (required) The metric name e.g. 'myapp.request.size'. Cannot contain ':' or '|'
+                value (number): (required) The latest value to set for the metric
+                sample_rate (number): (optional) sends only a sample of data e.g. 0.5 indicates 50% of data being sent. Default value is 1
+                labels (dict): (optional)  adds metadata to a metric. Specified as a dict of key value pairs. Cannot contain '#' or '|'
         '''
         self.client.gauge(self.sanitize(name, ':'), value, sample_rate, tags=self.sanitize_labels(labels))
 

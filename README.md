@@ -55,7 +55,7 @@ client.gauge('request.size', 32.25, 0.75, {'environment': 'Prod', 'account_id': 
 `def count(self, name, value, sample_rate, labels):`
   * `name: (required)` The metric name e.g. 'myapp.request.size'. Cannot contain ':' or '|'
   * `value: (optional)` the amount to increment the metric by, the default is 1.
-  * `sampleRate: (optional)` sends only a sample of data e.g. 0.5 indicates 50% of data being sent. Default value is 1
+  * `sample_rate: (optional)` sends only a sample of data e.g. 0.5 indicates 50% of data being sent. Default value is 1
   * `labels: (optional)`  adds metadata to a metric. Specified as a dict of key value pairs. Cannot contain '#' or '|'
 
 ```
