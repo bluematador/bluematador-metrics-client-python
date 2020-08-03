@@ -6,7 +6,7 @@ class OverriddenClient(statsd.StatsClient):
         if rate and rate != 1:
             value = '{}|@{}'.format(value, rate)
         if self._prefix:
-            state = '{}.{}'.format(self._prefix, stat)
+            stat = '{}.{}'.format(self._prefix, stat)
         if tags:
             tag_string = '#'.join(self._build_tag(k, v) for k, v in tags.items())
             return '{}:{}|#{}'.format(stat, value, tag_string)
