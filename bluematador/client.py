@@ -1,9 +1,26 @@
 import os
 from statsd import client as statsd
 
+class OverriddenClient(statsd.StatsClient):
+    def _prepare(self, stat, value, rate, tags=None):
+        if rate and rate != 1:
+            value = '{}|@{}'.format(value, rate)
+        if self._prefix:
+            state = '{}.{}'.format(self._prefix, stat)
+        if tags:
+            tag_string = '#'.join(self._build_tag(k, v) for k, v in tags.items())
+            return '{}:{}|#{}'.format(stat, value, tag_string)
+        return '{}:{}'.format(stat, value)
+
+    def _build_tag(self, tag, value):
+        if value:
+            return '{}:{}'.format(tag, value)
+        else:
+            return tag
+
 class BlueMatadorClient():
     def __init__(self, prefix=None, host=os.environ.get('BLUEMATADOR_AGENT_HOST', 'localhost'), port=os.environ.get('BLUEMATADOR_AGENT_PORT', 8767)):
-        self.client = statsd.StatsClient(host, port, self.sanitize(prefix))
+        self.client = OverriddenClient(host, port, prefix)
 
     def count(self, name, value=1, sample_rate=1, labels={}):
         '''
@@ -31,7 +48,7 @@ class BlueMatadorClient():
         self.client.gauge(self.sanitize(name, ':'), value, sample_rate, tags=self.sanitize_labels(labels))
 
     def sanitize(self, source_string, replace_string):
-        sanitized_string = source_string
+        sanitized_string = str(source_string)
         if replace_string in sanitized_string:
             sanitized_string = sanitized_string.replace(replace_string, '_')
         if '|' in sanitized_string:
